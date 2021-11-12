@@ -1,6 +1,8 @@
 
 package gameoflife;
 
+import java.awt.Color;
+
 public class Cell {
     
     private boolean celula; //atributos
