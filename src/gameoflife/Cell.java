@@ -7,23 +7,23 @@ public class Cell {
     
     private boolean celula; //atributos
     
-      public Cell(boolean state){
+    public Cell(boolean state){
         this.celula=state;
     }
     
     public boolean isAlive(){
-        
-     
-        return false;
+        return celula;
     }
     
     public void setState(boolean state){
-        //TODO implement me
+        celula=state;   
     } 
     
-    public Color getColor(){
-      //TODO implement me
-       return null;
+    public Color getColor(){ 
+       if(celula==true)
+           return Color.RED;
+       else 
+           return Color.WHITE;
     }
     
 }

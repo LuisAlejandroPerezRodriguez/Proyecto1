@@ -10,29 +10,40 @@ package gameoflife;
  * @author luisa
  */
 public class Simulator {
-        //TODO implement me
+
+   private  Cell[][] celulas;
+   private boolean correr=false;
+   private int count;
     
-    
+  public Simulator(int numberOfSquares){
+      celulas=new Cell[numberOfSquares][numberOfSquares]; 
+      for (int i=0;i<this.celulas.length;i++){
+         
+         for(int j=0;i<this.celulas.length;j++){
+         celulas[i][j]=new Cell(false);
+         }
+      }
+      this.count=0;
+  }    
     public boolean isRunning(){
-        //TODO implement me
-        return false;
+        return correr;
     }
     
     public void setRunning(){
-        //TODO implement me
+        this.correr=true;
     }
     
      public void resetRunning(){
-        //TODO implement me
+        this.correr=false;
     }
     
     public Cell getCell(int i, int j){
-       //TODO implement me
-        return null;
+  
+        return this.celulas[i][j];
     }
     public int  getNumberOfSquares(){
-        //TODO implement me
-        return 0;
+       
+        return this.celulas.length;
     }
     
     public void randomGridCell(){
@@ -41,8 +52,8 @@ public class Simulator {
     }
 
     void setCellState(int i, int j) {
-        
-       //TODO implement me
+       this.celulas[i][j].setState(true);
+       
     }
 //If the cell is alive in the current time step: If the cell has 2 or 3 living neighbors, then the cell 
  //       remains alive in the next time step; otherwise, it dies.
@@ -51,11 +62,56 @@ public class Simulator {
     //then the cell becomes alive in the next time step; otherwise, it remains dead. 
     //(Three living cells give birth to a new living cell.)
     void update() {
-       //TODO implement me
+       this.count++;
+       Cell[][] nuevacelula=new Cell[getNumberOfSquares()][getNumberOfSquares()];
+       for (int i=0;i<this.celulas.length;i++){
+         
+         for(int j=0;i<this.celulas.length;j++){
+         nuevacelula[i][j]=new Cell(false);
+         }
+      }
+          for (int i=0;i<this.celulas.length;i++){
+         
+         for(int j=0;i<this.celulas.length;j++){
+         int vecinos=countAliveNeigbors(i,j);
+         if(this.celulas[i][j].isAlive() && vecinos>2 && vecinos<4){
+          nuevacelula[i][j].setState(true);
+         }
+         else if(this.celulas[i][j].isAlive() && vecinos<2){
+         nuevacelula[i][j].setState(false);
+         }
+         else  if(this.celulas[i][j].isAlive() && vecinos>3){
+           nuevacelula[i][j].setState(false);
+           }
+            else if(!(this.celulas[i][j].isAlive()) && vecinos==3){
+            nuevacelula[i][j].setState(true);
+             }
+            else {
+                nuevacelula[i][j].setState(false);  
+            }
+         
+         
+         }
+           }
+          
+         for (int i=0;i<this.celulas.length;i++){
+         
+         for(int j=0;i<this.celulas.length;j++){
+         this.celulas[i][j]=nuevacelula[i][j];
+         }
+      }
+        
     }
     int countAliveNeigbors(int x, int y){
-        //TODO implement me
-          return 0;
+        int vecinos=0;
+        for (int i=x-1;i<=x+1;i++){
+         
+         for(int j=y-1;i<=y+1;j++){
+         if(i>=0&&j>=0 &&i<=celulas.length &&j<=celulas.length  && !(i==x && j==y)&&this.celulas[i][j].isAlive() ){ vecinos++;}
+         }
+      }
+        
+          return vecinos;
     }
     boolean  stayAlive(boolean isAlive, int x, int y){
       
@@ -66,14 +122,19 @@ public class Simulator {
     }
     boolean isCellAlive(int x, int y){
                     //TODO implement me
-                    return false;
+                    return this.celulas[x][y].isAlive();
     }
 
     void resetAll() {
-         //TODO implement me
+         for (int i=0;i<this.celulas.length;i++){
+         
+         for(int j=0;i<this.celulas.length;j++){
+         this.celulas[i][j].setState(false);
+         }
+         }
     }
     public int getCountIteration(){
-        //TODO implement me
-        return 0;
+        
+        return count;
     }
 }

@@ -5,19 +5,89 @@
  */
 package gameoflife;
 
-/**
- *
- * @author luisa
- */
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import javax.swing.Timer;
+
 public class GridPanel extends javax.swing.JPanel {
 
     /**
      * Creates new form GridPanel
      */
+    
+    Simulator simulator;
+    final int gridW=512;
+    final int gridH=512;
+    final int numberOfSquares=64;
+    
     public GridPanel() {
         initComponents();
     }
 
+    public void InitSimulator(){
+        //TODO init your simulator 
+         simulator = new Simulator(numberOfSquares);
+         
+         
+    }
+    
+      private void doDrawing(Graphics g) {
+
+        Graphics2D g2d = (Graphics2D) g;
+        //TODO implment grid drawing, live squares one color, dead or free square other color
+       // g2d.drawString("Java 2D", 50, 50);
+       
+        //int squares = simulator.getNumberOfSquares();
+        int squareSize = gridW/this.numberOfSquares;
+        
+        //squares= (int) Math.sqrt(squares);
+        int x=0;
+        int y=0;
+        for(int i=0;i< this.numberOfSquares; i++){
+            for(int j=0;j< this.numberOfSquares;j++){
+                //TODO get cell and then get color from the cell
+                //This is a random color , it must be color from the cell 
+                //Color color = Math.random()>0.5 ? Color.BLUE : Color.BLACK;
+                if(simulator.isCellAlive(i, j))
+                g2d.setColor(Color.GREEN);
+                else
+                g2d.setColor(Color.white);
+   
+                x=squareSize*j;
+                y= squareSize*i;
+                
+                //Draw cell 
+                 g2d.fillRect(x, y, squareSize, squareSize);
+            }
+        }
+        
+    }
+      
+      public void updateSimulator(){
+         System.out.println("updating");
+         simulator.update();
+     }
+     
+     public void clickedCell(int x, int y){
+         //TODO  change cell state on simulator or whatever
+        int squareSize = gridW/this.numberOfSquares;
+
+         int j= x/squareSize;
+         int i= y/squareSize;
+         
+          System.out.println("x: "+x+ " y: "+y +"  "+ squareSize+" i "+i+" j "+j);
+          simulator.setCellState(i, j);
+        
+     }
+    
+      @Override
+        public void paintComponent(Graphics g) {
+        System.out.print("on paint");
+        super.paintComponent(g);
+        doDrawing(g);
+    }
+        
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -39,6 +109,32 @@ public class GridPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    public boolean isSimulationRunning() {
+       //TODO implement me
+       return simulator.isRunning();
+    }
+
+    public void startSimulation() {
+       //TODO implement me
+       simulator.setRunning();
+    }
+
+    public void stopSimulation() {
+       //TODO implement me
+       simulator.resetRunning();
+    }
+
+    void resetSimulator() {
+       //TODO implement me
+       simulator.resetAll();
+        simulator.resetRunning();
+       
+    }
+    
+    public int getIterations(){
+        //TODO implement me
+        return simulator.getCountIteration();
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables

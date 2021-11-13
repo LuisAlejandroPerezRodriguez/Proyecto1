@@ -4,18 +4,31 @@
  * and open the template in the editor.
  */
 package gameoflife;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import javax.swing.Timer;
 
-/**
- *
- * @author luisa
- */
-public class MainFrame extends javax.swing.JFrame {
+public class MainFrame extends javax.swing.JFrame   {
 
     /**
      * Creates new form MainFrame
      */
+    
+    Timer timer;
+    int delay;
+    private int timeCounter;
+    private int timeToUpdate;
+    GridPanel g1= new GridPanel();
+    
     public MainFrame() {
+        
         initComponents();
+        timeCounter=0;
+        timeToUpdate=0;
+       this.gridPanel1.InitSimulator();
+        delay=100;
+        initTimer();
+       
     }
 
     /**
@@ -27,27 +40,21 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        GridPanel = new javax.swing.JPanel();
-        Reset = new javax.swing.JButton();
         Next = new javax.swing.JButton();
+        Reset = new javax.swing.JButton();
         Auto = new javax.swing.JRadioButton();
         Start = new javax.swing.JButton();
         Velocidad = new javax.swing.JSlider();
+        gridPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        GridPanel.setBackground(new java.awt.Color(255, 255, 255));
-
-        javax.swing.GroupLayout GridPanelLayout = new javax.swing.GroupLayout(GridPanel);
-        GridPanel.setLayout(GridPanelLayout);
-        GridPanelLayout.setHorizontalGroup(
-            GridPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 263, Short.MAX_VALUE)
-        );
-        GridPanelLayout.setVerticalGroup(
-            GridPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 253, Short.MAX_VALUE)
-        );
+        Next.setText("Next");
+        Next.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                NextActionPerformed(evt);
+            }
+        });
 
         Reset.setText("Reset");
         Reset.addActionListener(new java.awt.event.ActionListener() {
@@ -56,76 +63,128 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        Next.setText("Next");
-
         Auto.setText("Auto");
-        Auto.addActionListener(new java.awt.event.ActionListener() {
+
+        Start.setText("Start");
+        Start.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                AutoActionPerformed(evt);
+                StartActionPerformed(evt);
             }
         });
 
-        Start.setText("Start");
+        Velocidad.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                VelocidadStateChanged(evt);
+            }
+        });
+
+        gridPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        gridPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                gridPanel1MouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout gridPanel1Layout = new javax.swing.GroupLayout(gridPanel1);
+        gridPanel1.setLayout(gridPanel1Layout);
+        gridPanel1Layout.setHorizontalGroup(
+            gridPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 188, Short.MAX_VALUE)
+        );
+        gridPanel1Layout.setVerticalGroup(
+            gridPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 173, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(117, 117, 117)
-                .addComponent(GridPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Next)
-                    .addComponent(Reset))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 119, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(Start)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(Auto, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Velocidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addGap(19, 19, 19)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(Reset)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(Start))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(Next)
+                                .addGap(56, 56, 56)
+                                .addComponent(Auto, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(Velocidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(130, 130, 130)
+                        .addComponent(gridPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(93, 93, 93)
+                .addComponent(gridPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 105, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(GridPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(Next)
                             .addComponent(Auto))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                        .addGap(18, 18, 18))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(Velocidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(11, 11, 11)))
+                        .addGap(10, 10, 10)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Reset)
-                    .addComponent(Start))
-                .addContainerGap())
+                    .addComponent(Start)))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void ResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ResetActionPerformed
-        // TODO add your handling code here:
+     this.gridPanel1.resetSimulator();
     }//GEN-LAST:event_ResetActionPerformed
 
-    private void AutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AutoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_AutoActionPerformed
+    private void VelocidadStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_VelocidadStateChanged
+        System.out.println(Velocidad.getValue());
+        timeToUpdate=Velocidad.getValue();
+    }//GEN-LAST:event_VelocidadStateChanged
+
+    private void gridPanel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_gridPanel1MouseClicked
+        int x= evt.getX();
+        int y= evt.getY();
+
+
+        this.gridPanel1.clickedCell(x, y);
+        repaint();
+    }//GEN-LAST:event_gridPanel1MouseClicked
+
+    private void NextActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NextActionPerformed
+        if(this.Next.isSelected()==false){
+          this.gridPanel1.updateSimulator();
+          this.Next.setText(""+this.gridPanel1.getIterations());
+         }
+    }//GEN-LAST:event_NextActionPerformed
+
+    private void StartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartActionPerformed
+          Reset.setBackground(Color.red);
+        if(this.gridPanel1.isSimulationRunning()){
+            this.gridPanel1.stopSimulation();
+            Reset.setText("Start");
+            Reset.setBackground(Color.GREEN);
+        }else{
+             this.gridPanel1.startSimulation();
+             Reset.setText("Stop");
+             Reset.setBackground(Color.red);
+        }
+    }//GEN-LAST:event_StartActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
+   public static void main1(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -159,10 +218,35 @@ public class MainFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton Auto;
-    private javax.swing.JPanel GridPanel;
     private javax.swing.JButton Next;
     private javax.swing.JButton Reset;
     private javax.swing.JButton Start;
     private javax.swing.JSlider Velocidad;
+    private javax.swing.JPanel gridPanel1;
     // End of variables declaration//GEN-END:variables
+
+private void initTimer() {
+        timer = new Timer(delay, this);
+        
+        timer.setRepeats(true);
+        timer.start();
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        //Update Speed
+        //Called each 100ms  
+        System.out.print("timer ");
+        if(this.timeCounter > this.timeToUpdate){
+            this.timeCounter =0;
+        if(this.jRadioButton1.isSelected())
+            this.gridPanel1.updateSimulator();
+        this.jLabel3.setText(""+this.gridPanel1.getIterations());
+        repaint();
+        }else
+             this.timeCounter ++;
+    }
+
+
+
 }
