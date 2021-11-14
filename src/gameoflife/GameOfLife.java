@@ -7,7 +7,7 @@ public class GameOfLife {
         
         MainFrame m1= new MainFrame();
         m1.setVisible(true);
-        
+       
     }
     
 }

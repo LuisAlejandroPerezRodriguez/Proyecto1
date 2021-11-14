@@ -10,20 +10,22 @@ package gameoflife;
  * @author luisa
  */
 public class Simulator {
-
+    //atributos
+   int numberOfSquares;
    private  Cell[][] celulas;
    private boolean correr=false;
-   private int count;
+   private int count=0;
     
   public Simulator(int numberOfSquares){
-      celulas=new Cell[numberOfSquares][numberOfSquares]; 
-      for (int i=0;i<this.celulas.length;i++){
+      this.numberOfSquares = numberOfSquares;
+      this.celulas=new Cell[numberOfSquares][numberOfSquares]; 
+      for (int i=0;i<this.numberOfSquares;i++){
          
-         for(int j=0;i<this.celulas.length;j++){
+         for(int j=0;j<this.numberOfSquares;j++){
          celulas[i][j]=new Cell(false);
          }
       }
-      this.count=0;
+      
   }    
     public boolean isRunning(){
         return correr;
@@ -39,16 +41,20 @@ public class Simulator {
     
     public Cell getCell(int i, int j){
   
-        return this.celulas[i][j];
+          if (i >= 0 && i < this.numberOfSquares && j >= 0 && j < this.numberOfSquares )
+              return this.celulas[i][j]; 
+          
+            else return null;
     }
     public int  getNumberOfSquares(){
        
-        return this.celulas.length;
+        return this.numberOfSquares;
     }
     
     public void randomGridCell(){
         double n = Math.random();
-        //TODO implement me
+
+      
     }
 
     void setCellState(int i, int j) {
@@ -61,74 +67,71 @@ public class Simulator {
 //If the cell is dead in the current time step: If the cell has 3 living neighbors, 
     //then the cell becomes alive in the next time step; otherwise, it remains dead. 
     //(Three living cells give birth to a new living cell.)
-    void update() {
-       this.count++;
-       Cell[][] nuevacelula=new Cell[getNumberOfSquares()][getNumberOfSquares()];
-       for (int i=0;i<this.celulas.length;i++){
-         
-         for(int j=0;i<this.celulas.length;j++){
-         nuevacelula[i][j]=new Cell(false);
-         }
-      }
-          for (int i=0;i<this.celulas.length;i++){
-         
-         for(int j=0;i<this.celulas.length;j++){
-         int vecinos=countAliveNeigbors(i,j);
-         if(this.celulas[i][j].isAlive() && vecinos>2 && vecinos<4){
-          nuevacelula[i][j].setState(true);
-         }
-         else if(this.celulas[i][j].isAlive() && vecinos<2){
-         nuevacelula[i][j].setState(false);
-         }
-         else  if(this.celulas[i][j].isAlive() && vecinos>3){
-           nuevacelula[i][j].setState(false);
-           }
-            else if(!(this.celulas[i][j].isAlive()) && vecinos==3){
-            nuevacelula[i][j].setState(true);
-             }
-            else {
-                nuevacelula[i][j].setState(false);  
+    public void update() {
+       
+          Cell[][] nuevacelula = new Cell[this.numberOfSquares][numberOfSquares];
+      if (this.correr) {
+         ++this.count;
+
+         for(int i = 0; i < this.celulas.length; ++i) {
+            for(int j = 0; j < this.celulas.length; ++j) {
+               Cell celulaactual = this.celulas[i][j];
+               boolean vivir = this.stayAlive(celulaactual.isAlive(), i, j);
+               nuevacelula[i][j] = new Cell(vivir);
             }
-         
-         
          }
-           }
-          
-         for (int i=0;i<this.celulas.length;i++){
-         
-         for(int j=0;i<this.celulas.length;j++){
-         this.celulas[i][j]=nuevacelula[i][j];
-         }
-      }
+
+         this.celulas = nuevacelula;}}
         
-    }
+     
     int countAliveNeigbors(int x, int y){
         int vecinos=0;
-        for (int i=x-1;i<=x+1;i++){
-         
-         for(int j=y-1;i<=y+1;j++){
-         if(i>=0&&j>=0 &&i<=celulas.length &&j<=celulas.length  && !(i==x && j==y)&&this.celulas[i][j].isAlive() ){ vecinos++;}
+        for(int i = -1; i < 2; ++i) {
+         if (this.isCellAlive(x + i, y - 1)) {
+            ++vecinos;
+         }
+
+         if (this.isCellAlive(x + i, y + 1)) {
+            ++vecinos;
          }
       }
-        
-          return vecinos;
+
+      if (this.isCellAlive(x + 1, y)) {
+         ++vecinos;
+      }
+
+      if (this.isCellAlive(x - 1, y)) {
+         ++vecinos;
+      }
+
+      return vecinos;
     }
     boolean  stayAlive(boolean isAlive, int x, int y){
       
-       //TODO implement me
-         
-        
+      int count = this.countAliveNeigbors(x, y);
+      if (isAlive) {
+         if (count == 2 || count == 3) {
+            return true;
+         }
+      } else if (count == 3) {
+         return true;
+      }
+            
         return false;
     }
+    
+    
+    
     boolean isCellAlive(int x, int y){
                     //TODO implement me
-                    return this.celulas[x][y].isAlive();
+                    Cell c = this.getCell(x, y);
+      return c != null && c.isAlive();
     }
 
     void resetAll() {
          for (int i=0;i<this.celulas.length;i++){
          
-         for(int j=0;i<this.celulas.length;j++){
+         for(int j=0;j<this.celulas.length;j++){
          this.celulas[i][j].setState(false);
          }
          }

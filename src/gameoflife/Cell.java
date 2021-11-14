@@ -21,9 +21,9 @@ public class Cell {
     
     public Color getColor(){ 
        if(celula==true)
-           return Color.RED;
+           return Color.GREEN;
        else 
-           return Color.WHITE;
+           return Color.black;
     }
     
 }
